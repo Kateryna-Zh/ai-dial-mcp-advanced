@@ -67,3 +67,12 @@ class MCPClient:
 
         return content
 
+    async def close(self) -> None:
+        """Close MCP client session and streams"""
+        if self._session_context and self.session:
+            await self._session_context.__aexit__(None, None, None)
+            self.session = None
+            self._session_context = None
+        if self._streams_context:
+            await self._streams_context.__aexit__(None, None, None)
+            self._streams_context = None
